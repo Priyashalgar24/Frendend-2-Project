@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        
+        input[type="text"] {
+            width: 78%;
+        }
+		.buttonStyle {
+			background-color: black;
+			color: white;
+			padding: 10px 20px; /* Adjust padding as needed */
+			border: none;
+			height: 60px;
+			width:15%;
+			cursor: pointer;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 20px; /* Adjust font size as needed */
+			margin: 5px; /* Adjust margin as needed */
+}
+.textboxStyle {
+    height: 48px; /* Adjust the height as needed */
+    border: 2px solid blue;
+    border-radius: 5px; /* Rounded corners, adjust as needed */
+    padding: 5px; /* Adjust padding as needed */
+    font-size: 20px; /* Adjust font size as needed */
+}
+
+    </style>
+</head>
+<body>
+ <h1 style="background-color:black;color:white;height:40px;"><center>Student Portal</center>
+ </h1>
+
+    <input class="textboxStyle"  type="text" id="searchInput" placeholder="Search...">   <button class="buttonStyle" onclick="searchData()">Search</button>
+    </br>
+ </br>
+	 <button class="buttonStyle" onclick="sortTable(1)">Sort A to Z by Name</button>
+    <button class="buttonStyle" onclick="sortTable(1, true)">Sort Z-A</button>
+    <button class="buttonStyle" onclick="MarkssortTable(5, 'desc')">Sort Marks (Desc)</button>
+    <button class="buttonStyle" onclick="sortTable(6, true)">Sort by Passing</button>
+    <button class="buttonStyle" onclick="MarkssortTable(4, 'desc')">Sort by Class</button>
+    <button class="buttonStyle" onclick="sortTable(3)">Sort by Gender</button>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Class</th>
+                <th>Marks</th>
+                <th>Passing</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be generated here -->
+        </tbody>
+    </table>
+    
+
+    <script>
+	
+let headers = ['ID', 'Name', 'Email', 'Gender', 'Class', 'Marks', 'Passing'];
+        // Sample JSON data
+       
+		
+		
+		  const jsonData =  [
+
+    { 'ID': 1, 'Name': 'Chadwick', 'Email': 'cayre0@cam.ac.uk', 'Gender': 'Male', 'Class': 11, 'Marks': 18, 'Passing': false },
+    { 'ID': 2, 'Name': 'Abrahan', 'Email': 'aseabrocke1@ocn.ne.jp', 'Gender': 'Male', 'Class': 3, 'Marks': 27, 'Passing': true },
+    { 'ID': 3, 'Name': 'Nathanael', 'Email': 'nlaye2@typepad.com', 'Gender': 'Male', 'Class': 10, 'Marks': 89, 'Passing': false },
+    { 'ID': 4, 'Name': 'Luigi', 'Email': 'lbalcers3@reverbnation.com', 'Gender': 'AGender', 'Class': 8, 'Marks': 30, 'Passing': false },
+    { 'ID': 5, 'Name': 'Adam', 'Email': 'agurg4@xrea.com', 'Gender': 'Male', 'Class': 3, 'Marks': 10, 'Passing': true },
+    { 'ID': 6, 'Name': 'Kev', 'Email': 'khaitlie5@booking.com', 'Gender': 'Male', 'Class': 1, 'Marks': 59, 'Passing': true },
+    { 'ID': 7, 'Name': 'Reinhard', 'Email': 'rroyl6@sun.com', 'Gender': 'Male', 'Class': 4, 'Marks': 60, 'Passing': true },
+    { 'ID': 8, 'Name': 'Nonah', 'Email': 'nkilmartin7@washington.edu', 'Gender': 'Female', 'Class': 9, 'Marks': 4, 'Passing': false },
+    { 'ID': 9, 'Name': 'Clo', 'Email': 'cfalkinder8@mysql.com', 'Gender': 'Female', 'Class': 6, 'Marks': 9, 'Passing': false },
+    { 'ID': 10, 'Name': 'Clyve', 'Email': 'cdedney9@europa.eu', 'Gender': 'Male', 'Class': 12, 'Marks': 57, 'Passing': false },
+    { 'ID': 11, 'Name': 'Vincenz', 'Email': 'vsurphlissa@soup.io', 'Gender': 'Male', 'Class': 4, 'Marks': 2, 'Passing': true },
+    { 'ID': 12, 'Name': 'Helene', 'Email': 'hgriffittsb@umn.edu', 'Gender': 'Female', 'Class': 12, 'Marks': 80, 'Passing': true },
+    { 'ID': 13, 'Name': 'Lydia', 'Email': 'lpamphilonc@mit.edu', 'Gender': 'Female', 'Class': 5, 'Marks': 81, 'Passing': false },
+    { 'ID': 14, 'Name': 'Dov', 'Email': 'dcubbinID@theguardian.com', 'Gender': 'Genderqueer', 'Class': 12, 'Marks': 25, 'Passing': true },
+    { 'ID': 15, 'Name': 'Mimi', 'Email': 'mmonksfielde@mapquest.com', 'Gender': 'Female', 'Class': 4, 'Marks': 52, 'Passing': true },
+    { 'ID': 16, 'Name': 'Marguerite', 'Email': 'mevansonf@huffingtonpost.com', 'Gender': 'Female', 'Class': 10, 'Marks': 96, 'Passing': true },
+    {'ID': 17, 'Name': 'Michele', 'Email': 'mharesnaipg @networkadvertising.org', 'Gender': 'Male', 'Class': 9, 'Marks': 46, 'Passing': true},
+    { 'ID': 18, 'Name': 'Johnna', 'Email': 'jbriarsh@behance.net', 'Gender': 'AGender', 'Class': 9, 'Marks': 77, 'Passing': false },
+    { 'ID': 19, 'Name': 'Debee', 'Email': 'dbonnieri@opensource.org', 'Gender': 'Female', 'Class': 2, 'Marks': 35, 'Passing': false },
+    { 'ID': 20, 'Name': 'Gunther', 'Email': 'gtaverinerj@google.ca', 'Gender': 'Male', 'Class': 1, 'Marks': 72, 'Passing': true },
+    { 'ID': 21, 'Name': 'Dominick', 'Email': 'dcoppockk@mlb.com', 'Gender': 'Genderqueer', 'Class': 9, 'Marks': 10, 'Passing': false },
+    { 'ID': 22, 'Name': 'Harp', 'Email': 'hcolebrookl@gravatar.com', 'Gender': 'Male', 'Class': 4, 'Marks': 83, 'Passing': false },
+    { 'ID': 23, 'Name': 'Carlen', 'Email': 'cbakeupm@craigslist.org', 'Gender': 'Female', 'Class': 2, 'Marks': 28, 'Passing': false },
+    { 'ID': 24, 'Name': 'Mario', 'Email': 'mcrambien@so-net.ne.jp', 'Gender': 'Male', 'Class': 9, 'Marks': 33, 'Passing': true },
+    { 'ID': 25, 'Name': 'Maribel', 'Email': 'mhindenburgo@squarespace.com', 'Gender': 'Female', 'Class': 3, 'Marks': 24, 'Passing': true },
+    { 'ID': 26, 'Name': 'Merilee', 'Email': 'mlukockp@rambler.ru', 'Gender': 'Female', 'Class': 6, 'Marks': 25, 'Passing': false },
+    { 'ID': 27, 'Name': 'Carroll', 'Email': 'cwaterfieldq@paypal.com', 'Gender': 'Male', 'Class': 5, 'Marks': 93, 'Passing': false },
+    { 'ID': 28, 'Name': 'Sandor', 'Email': 'smuldoonr@usda.gov', 'Gender': 'Male', 'Class': 9, 'Marks': 52, 'Passing': true },
+    { 'ID': 29, 'Name': 'Hagan', 'Email': 'hghIDinis@upenn.edu', 'Gender': 'Male', 'Class': 8, 'Marks': 100, 'Passing': true },
+    { 'ID': 30, 'Name': 'Odetta', 'Email': 'omcnamarat@hugedomains.com', 'Gender': 'GenderfluID', 'Class': 11, 'Marks': 48, 'Passing': false },
+    { 'ID': 31, 'Name': 'Rozelle', 'Email': 'rmelleru@uol.com.br', 'Gender': 'BiGender', 'Class': 6, 'Marks': 81, 'Passing': true },
+    { 'ID': 32, 'Name': 'Burnaby', 'Email': 'bhebbronv@toplist.cz', 'Gender': 'Male', 'Class': 10, 'Marks': 6, 'Passing': false },
+    { 'ID': 33, 'Name': 'Tommy', 'Email': 'tsowleyw@drupal.org', 'Gender': 'Male', 'Class': 10, 'Marks': 42, 'Passing': true },
+    { 'ID': 34, 'Name': 'Cristen', 'Email': 'cvigiettix@cnn.com', 'Gender': 'Female', 'Class': 6, 'Marks': 13, 'Passing': false },
+    { 'ID': 35, 'Name': 'Kipp', 'Email': 'kshipseyy@wunderground.com', 'Gender': 'Male', 'Class': 8, 'Marks': 72, 'Passing': true },
+    { 'ID': 36, 'Name': 'Willi', 'Email': 'wdeeprosez@youku.com', 'Gender': 'Female', 'Class': 1, 'Marks': 50, 'Passing': false },
+    { 'ID': 37, 'Name': 'Julita', 'Email': 'jcoverdale10@etsy.com', 'Gender': 'Female', 'Class': 7, 'Marks': 9, 'Passing': false },
+    { 'ID': 38, 'Name': 'Kippy', 'Email': 'kdysart11@springer.com', 'Gender': 'Male', 'Class': 2, 'Marks': 77, 'Passing': true },
+    { 'ID': 39, 'Name': 'Xena', 'Email': 'xcleen12 @usatoday.com', 'Gender': 'Female', 'Class': 11, 'Marks': 25, 'Passing': false },
+    { 'ID': 40, 'Name': 'Deane', 'Email': 'dhallbird13@reference.com', 'Gender': 'Male', 'Class': 2, 'Marks': 99, 'Passing': false },
+    { 'ID': 41, 'Name': 'Brigham', 'Email': 'bboggish14@xinhuanet.com', 'Gender': 'Male', 'Class': 4, 'Marks': 96, 'Passing': false },
+    { 'ID': 42, 'Name': 'Arliene', 'Email': 'astubbins15@yellowpages.com', 'Gender': 'Female', 'Class': 6, 'Marks': 39, 'Passing': false },
+    { 'ID': 43, 'Name': 'Keefer', 'Email': 'kmensler16@moonfruit.com', 'Gender': 'Male', 'Class': 10, 'Marks': 9, 'Passing': false },
+    { 'ID': 44, 'Name': 'De witt', 'Email': 'dlethby17@biblegateway.com', 'Gender': 'Male', 'Class': 5, 'Marks': 15, 'Passing': true },
+    { 'ID': 45, 'Name': 'Karry', 'Email': 'kalflat18@eepurl.com', 'Gender': 'Female', 'Class': 9, 'Marks': 28, 'Passing': false },
+    { 'ID': 46, 'Name': 'Etan', 'Email': 'ewardell19@usgs.gov', 'Gender': 'Male', 'Class': 11, 'Marks': 26, 'Passing': false },
+    { 'ID': 47, 'Name': 'Corney', 'Email': 'ckollaschek1a@discuz.net', 'Gender': 'Male', 'Class': 3, 'Marks': 34, 'Passing': true },
+    { 'ID': 48, 'Name': 'Robenia', 'Email': 'rscain1b@yelp.com', 'Gender': 'Female', 'Class': 4, 'Marks': 30, 'Passing': true },
+    { 'ID': 49, 'Name': 'Marj', 'Email': 'mcheltnam1c@wunderground.com', 'Gender': 'Female', 'Class': 2, 'Marks': 7, 'Passing': false },
+    { 'ID': 50, 'Name': 'Graham', 'Email': 'glethem1d@hp.com', 'Gender': 'BiGender', 'Class': 4, 'Marks': 10, 'Passing': true },
+    { 'ID': 51, 'Name': 'Mathew', 'Email': 'msadry1e@alexa.com', 'Gender': 'Male', 'Class': 2, 'Marks': 88, 'Passing': true },
+    { 'ID': 52, 'Name': 'Alberta', 'Email': 'adalessio1f@dagondesign.com', 'Gender': 'PolyGender', 'Class': 2, 'Marks': 82, 'Passing': true },
+    { 'ID': 53, 'Name': 'Reube', 'Email': 'rbrabyn1g@jugem.jp', 'Gender': 'Male', 'Class': 10, 'Marks': 71, 'Passing': true },
+    { 'ID': 54, 'Name': 'Rab', 'Email': 'rcluney1h@slate.com', 'Gender': 'Male', 'Class': 6, 'Marks': 59, 'Passing': false },
+    { 'ID': 55, 'Name': 'Honey', 'Email': 'hfrissell1i@senate.gov', 'Gender': 'Female', 'Class': 2, 'Marks': 82, 'Passing': true },
+    { 'ID': 56, 'Name': 'Leda', 'Email': 'ljehan1j@feedburner.com', 'Gender': 'Female', 'Class': 5, 'Marks': 13, 'Passing': false },
+    { 'ID': 57, 'Name': 'Whitby', 'Email': 'wgrogono1k@paypal.com', 'Gender': 'Male', 'Class': 4, 'Marks': 44, 'Passing': true },
+    { 'ID': 58, 'Name': 'Amalea', 'Email': 'asainz1l@miitbeian.gov.cn', 'Gender': 'Female', 'Class': 2, 'Marks': 58, 'Passing': true },
+    { 'ID': 59, 'Name': 'Abbe', 'Email': 'aguerner1m@4shared.com', 'Gender': 'Male', 'Class': 8, 'Marks': 71, 'Passing': false },
+    { 'ID': 60, 'Name': 'Sholom', 'Email': 'spouck1n@house.gov', 'Gender': 'Male', 'Class': 9, 'Marks': 68, 'Passing': true },
+    { 'ID': 61, 'Name': 'Flor', 'Email': 'fqueenborough1o@fc2.com', 'Gender': 'Female', 'Class': 6, 'Marks': 77, 'Passing': true },
+    { 'ID': 62, 'Name': 'Rupert', 'Email': 'rbrien1p@princeton.edu', 'Gender': 'Male', 'Class': 3, 'Marks': 62, 'Passing': false },
+    { 'ID': 63, 'Name': 'Loralee', 'Email': 'lpetrasch1q@uol.com.br', 'Gender': 'PolyGender', 'Class': 4, 'Marks': 43, 'Passing': false },
+    { 'ID': 64, 'Name': 'Christoffer',  'Email': 'cstain1r@vk.com', 'Gender': 'Male', 'Class': 8, 'Marks': 77, 'Passing': true },
+    { 'ID': 65, 'Name': 'Iver', 'Email': 'ifeldmark1s@cpanel.net', 'Gender': 'Male', 'Class': 4, 'Marks': 99, 'Passing': true },
+    { 'ID': 66, 'Name': 'Mikol', 'Email': 'mdoherty1t@ning.com', 'Gender': 'Male', 'Class': 4, 'Marks': 3, 'Passing': false },
+    { 'ID': 67, 'Name': 'Alysia', 'Email': 'adudhill1u@oracle.com', 'Gender': 'GenderfluID', 'Class': 12, 'Marks': 21, 'Passing': false },
+    { 'ID': 68, 'Name': 'Silvio', 'Email': 'syegoshin1v@github.io', 'Gender': 'Male', 'Class': 5, 'Marks': 38, 'Passing': true },
+    { 'ID': 69, 'Name': 'Darbie', 'Email': 'dstarkey1w@cbc.ca', 'Gender': 'Female', 'Class': 3, 'Marks': 52, 'Passing': false },
+    { 'ID': 70, 'Name': 'Sophi', 'Email': 'sfucher1x@wikia.com', 'Gender': 'Female', 'Class': 12, 'Marks': 31, 'Passing': true },
+    { 'ID': 71, 'Name': 'Warner', 'Email': 'wdirkin1y@nydailynews.com', 'Gender': 'Male', 'Class': 6, 'Marks': 56, 'Passing': false },
+    { 'ID': 72, 'Name': 'Randal', 'Email': 'rsalmons1z@cargocollective.com', 'Gender': 'Male', 'Class': 12, 'Marks': 5, 'Passing': true },
+    { 'ID': 73, 'Name': 'Ogden', 'Email': 'orowthorne20@state.tx.us', 'Gender': 'Male', 'Class': 3, 'Marks': 12, 'Passing': false },
+    { 'ID': 74, 'Name': 'AdelaIDe', 'Email': 'abrewster21@phpbb.com', 'Gender': 'Female', 'Class': 5, 'Marks': 82, 'Passing': true },
+    { 'ID': 75, 'Name': 'Maximilian', 'Email': 'mberesfore22@ox.ac.uk', 'Gender': 'Male', 'Class': 1, 'Marks': 51, 'Passing': true },
+    { 'ID': 76, 'Name': 'Gill', 'Email': 'gdoneld23@cnn.com', 'Gender': 'Male', 'Class': 9, 'Marks': 35, 'Passing': true },
+    { 'ID': 77, 'Name': 'Garrick', 'Email': 'gferreo24@fastcompany.com', 'Gender': 'Male', 'Class': 8, 'Marks': 87, 'Passing': true },
+    { 'ID': 78, 'Name': 'Bartel', 'Email': 'blugard25@typepad.com', 'Gender': 'Male', 'Class': 12, 'Marks': 37, 'Passing': false },
+    { 'ID': 79, 'Name': 'Herve', 'Email': 'hbeller26@geocities.com', 'Gender': 'Male', 'Class': 1, 'Marks': 70, 'Passing': false },
+    { 'ID': 80, 'Name': 'Janenna', 'Email': 'jpallesen27@shinystat.com', 'Gender': 'Female', 'Class': 3, 'Marks': 68, 'Passing': true },
+    { 'ID': 81, 'Name': 'Karly', 'Email': 'kbelmont28@booking.com', 'Gender': 'Female', 'Class': 6, 'Marks': 52, 'Passing': true },
+    { 'ID': 82, 'Name': 'Yanaton', 'Email': 'ygrasser29@bravesites.com', 'Gender': 'Male', 'Class': 5, 'Marks': 43, 'Passing': true },
+    { 'ID': 83, 'Name': 'Giordano', 'Email': 'gstanlack2a@wordpress.org', 'Gender': 'Male', 'Class': 2, 'Marks': 17, 'Passing': false },
+    { 'ID': 84, 'Name': 'Vergil', 'Email': 'vkelner2b@ihg.com', 'Gender': 'Male', 'Class': 10, 'Marks': 85, 'Passing': true },
+    { 'ID': 85, 'Name': 'Marjorie', 'Email': 'mcrimes2c@lulu.com', 'Gender': 'Female', 'Class': 10, 'Marks': 76, 'Passing': false },
+    { 'ID': 86, 'Name': 'Cullen', 'Email': 'clawlings2d@ow.ly', 'Gender': 'Male', 'Class': 9, 'Marks': 66, 'Passing': false },
+    { 'ID': 87, 'Name': 'Shayla', 'Email': 'stuft2e@plala.or.jp', 'Gender': 'PolyGender', 'Class': 11, 'Marks': 67, 'Passing': false },
+    { 'ID': 88, 'Name': 'Martguerita', 'Email': 'mseyffert2f@springer.com', 'Gender': 'Female', 'Class': 12, 'Marks': 70, 'Passing': false },
+    { 'ID': 89, 'Name': 'Valera', 'Email': 'vscullard2g@europa.eu', 'Gender': 'Female', 'Class': 10, 'Marks': 85, 'Passing': true },
+    { 'ID': 90, 'Name': 'Saleem', 'Email': 'spocklington2h@time.com', 'Gender': 'Male', 'Class': 9, 'Marks': 79, 'Passing': false },
+    { 'ID': 91, 'Name': 'Vincenz', 'Email': 'vmangeney2i@studiopress.com', 'Gender': 'Male', 'Class': 2, 'Marks': 15, 'Passing': true },
+    { 'ID': 92, 'Name': 'Hildy', 'Email': 'hskrzynski2j@1und1.de', 'Gender': 'Female', 'Class': 10, 'Marks': 93, 'Passing': true },
+    { 'ID': 93, 'Name': 'Devan', 'Email': 'dcuer2k@jigsy.com', 'Gender': 'Female', 'Class': 5, 'Marks': 71, 'Passing': false },
+    { 'ID': 94, 'Name': 'Samuele', 'Email': 'swoodward2l@prweb.com', 'Gender': 'Male', 'Class': 1, 'Marks': 51, 'Passing': true },
+    { 'ID': 95, 'Name': 'Skell', 'Email': 'soxby2m@1688.com', 'Gender': 'Male', 'Class': 10, 'Marks': 53, 'Passing': false },
+    { 'ID': 96, 'Name': 'Doria', 'Email': 'dlabbe2n@sun.com', 'Gender': 'Female', 'Class': 7, 'Marks': 95, 'Passing': false },
+    { 'ID': 97, 'Name': 'Livy', 'Email': 'lmaccleay2o@bravesites.com', 'Gender': 'Female', 'Class': 6, 'Marks': 50, 'Passing': true },
+    { 'ID': 98, 'Name': 'Drugi', 'Email': 'dbordone2p@slate.com', 'Gender': 'Male', 'Class': 4, 'Marks': 63, 'Passing': true },
+    { 'ID': 99, 'Name': 'Gordon', 'Email': 'gvieyra2q@geocities.com', 'Gender': 'Male', 'Class': 11, 'Marks': 59, 'Passing': false },
+    { 'ID': 100, 'Name': 'Zoe', 'Email': 'zmoorhead2r @sfgate.com', 'Gender': 'Female', 'Class': 8, 'Marks': 43, 'Passing': true },
+
+
+];
+
+        // Function to generate the table rows
+        function generateTable() {
+            const table = document.getElementById('studentTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+
+            // Clear existing rows
+            tbody.innerHTML = '';
+
+            // Iterate through the JSON data and create rows
+            for (const student of jsonData) {
+                const row = tbody.insertRow();
+                for (const header of headers) {
+                    const cell = row.insertCell();
+                    cell.textContent = student[header];
+                }
+            }
+        }
+
+        // Function to sort the table
+       function sortTable(columnIndex,status) {
+            const table = document.getElementById("studentTable");
+            const tbody = table.getElementsByTagName("tbody")[0];
+            const rows = Array.from(tbody.rows);
+			if(status == true){
+			            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].innerHTML.toLowerCase();
+                const cellB = b.cells[columnIndex].innerHTML.toLowerCase();
+                return cellB.localeCompare(cellA);
+            });
+			}
+			else{
+			
+			
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].innerHTML.toLowerCase();
+                const cellB = b.cells[columnIndex].innerHTML.toLowerCase();
+                return cellA.localeCompare(cellB);
+            });
+			}
+
+            tbody.innerHTML = ''; // Clear the table body
+
+            rows.forEach(row => {
+                tbody.appendChild(row); // Append sorted rows back to the table
+            });
+        }
+		
+		
+		
+		 function sortTable(columnIndex,status) {
+            const table = document.getElementById("studentTable");
+            const tbody = table.getElementsByTagName("tbody")[0];
+            const rows = Array.from(tbody.rows);
+			if(status == true){
+			            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].innerHTML.toLowerCase();
+                const cellB = b.cells[columnIndex].innerHTML.toLowerCase();
+                return cellB.localeCompare(cellA);
+            });
+			}
+			else{
+			
+			
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].innerHTML.toLowerCase();
+                const cellB = b.cells[columnIndex].innerHTML.toLowerCase();
+                return cellA.localeCompare(cellB);
+            });
+			}
+
+            tbody.innerHTML = ''; // Clear the table body
+
+            rows.forEach(row => {
+                tbody.appendChild(row); // Append sorted rows back to the table
+            });
+        }
+		
+		
+		
+		function MarkssortTable(columnIndex, sortOrder) {
+		
+		
+		const table = document.getElementById("studentTable");
+            const tbody = table.getElementsByTagName("tbody")[0];
+            const rows = Array.from(tbody.rows);
+			
+			
+            rows.sort((a, b) => {
+                const cellA = parseInt(a.cells[columnIndex].innerHTML.toLowerCase());
+                const cellB = parseInt(b.cells[columnIndex].innerHTML.toLowerCase());
+                return cellB - cellA;
+            });
+
+            tbody.innerHTML = ''; // Clear the table body
+
+            rows.forEach(row => {
+                tbody.appendChild(row); // Append sorted rows back to the table
+            });
+		
+		
+		
+		
+		
+		
+		
+	
+}
+
+        // Function to search for data
+        function searchData() {
+            const searchInput = document.getElementById('searchInput');
+            const filter = searchInput.value.toUpperCase();
+            const table = document.getElementById('studentTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = tbody.getElementsByTagName('tr');
+
+            for (const row of rows) {
+                const dataCells = row.getElementsByTagName('td');
+                let found = false;
+                for (const cell of dataCells) {
+                    if (cell.textContent.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                row.style.display = found ? '' : 'none';
+            }
+        }
+
+        // Initial table generation
+        generateTable();
+    </script>
+</body>
+</html>
